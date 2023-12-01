@@ -1,0 +1,93 @@
+Laravel Paso a Paso
+1ro Creamos el espacio dentro de laragon en www
+podemo abrir la consola para que nos deje en la rama
+
+2do Para iniciar un proyecto usamos el comando
+composer create-project laravel/nombre del proyecto
+composer create-project laravel/laravel dashboard
+Cuando termine de instalar nuestro proyecto nos movemos
+a la carpeta en este caso cd dashboard y despues abrimos
+visual code con el comando code .
+
+3ro Para este proyecto vamos a consumir una plantilla la
+instalamos con el siguiente comando en la terminal:
+- composer require takielias/tablar
+- php artisan tablar:install "Si aparece warning ejecutamos el siguiente comando"
+- npm install
+
+4to Terminado de instalar los paquetes de la plantilla nos vamos al ".env" en el arbol del proyecto para determinar el nombre de la base de datos y despues instalarla por default tendra el nombre de laravel la vamos a cambiar por que este nombre se usa en todos los proyectos de laravel. Yo le puse tablar y asi queda
+DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=tablar
+DB_USERNAME=root
+DB_PASSWORD=
+
+5to crear la base de datos del proyecto con el comando:
+php artisan migrate
+Esto crea la BD y las Tablas base del proyecto.
+
+6to correr 2 servidores cada uno en una consola:
+- php artisan serve
+- npm run dev
+
+7mo Instalar los Exports de la plantilla
+- php artisan tablar:export-congif
+- php artisan tablar:export-auth
+- php artisan tablar:export-assets
+- php artisan tablar:export-js
+- php artisan tablar:export-views
+- php artisan tablar:export-all
+
+8vo Instalar un Crud para nuestra app
+- composer require takielias/tablar-crud-generator --dev
+
+9no Publicar los paquetes instalados
+- php artisan vendor:publish --tag=crud
+
+10mo Migrar el proyecto agregando la tabla productos esto agrega el archivo donde configuramos la tabla al proyecto el cual despues de prepararlo lo vamos a migrar para que ya se agrege a la base en el paso 12.
+- php artisan make:migration create_products_table
+
+11vo Agregamos campos a la tabla recien creada para ello nos vamos a la ruta database/migrations/2023_12_01_163207_create_products_table.php
+
+Este es el bloque y quedara asi
+public function up(): void
+    {
+        Schema::create('products', function (Blueprint $table) {
+            $table->id();
+            
+            $table->timestamps();
+        });
+    }
+
+//////////////////////////////////////////
+Asi queda.
+
+public function up(): void
+    {
+        Schema::create('products', function (Blueprint $table) {
+            $table->id();
+            $table->string('description');
+            $table->integer('stock');
+            $table->decimal('price',10,2);
+            $table->timestamps();
+        });
+    }
+
+12vo Vamos a hora a migrar el archivo que preparamos pero ahora a la base de datos con el comando:
+- php artisan migrate
+Esto mando los campos y creo la tabla en al base
+
+13vo Crearemos ahora el modelo (el modelo son todos los archivos del MVC que ocuparemos para el crud de productos) con el comando:
+- php artisan make:crud products
+esto me da:
+Running Crud Generator ...
+Creating Controller ...
+Creating Model ...
+Creating Views ...
+Creating Route ...
+Created Successfully.
+
+14vo Vamos a controlar las rutas entramos a la carpeta config / tablar.php
+ahi en el json colocaremos los accesos para mi caso modificare con el siguinte cod:
+
